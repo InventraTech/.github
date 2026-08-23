@@ -1,0 +1,38 @@
+name: "Node Continuous Deployment"
+
+on:
+  workflow_call:
+    inputs:
+      node-version:
+        required: false
+        type: string
+        default: '20'
+
+jobs:
+  build-and-deploy:
+    name: "Build e Deploy no Vercel"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: "Checkout do código"
+        uses: actions/checkout@v4
+
+      - name: "Configurar o Node.js"
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ inputs.node-version }}
+          cache: npm
+
+      - name: "Instalar dependências"
+        run: npm ci
+
+      - name: "Compilar e buildar o projeto"
+        run: npm run build
+
+      - name: "Deploy para Vercel"
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          vercel-args: '--prod'

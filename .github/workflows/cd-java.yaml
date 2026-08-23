@@ -1,0 +1,48 @@
+name: "Java Continuous Deployment"
+
+on:
+  workflow_call:
+
+jobs:
+  build-and-push:
+    name: "Build e Push da imagem Docker"
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: "Checkout do código"
+        uses: actions/checkout@v4
+
+      - name: "Login no GHCR"
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: "Login no Docker Hub"
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: "Build e Push da imagem"
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: |
+            ghcr.io/inventratech/inventra-api:${{ github.sha }}
+            ghcr.io/inventratech/inventra-api:latest
+            inventratech/inventra-api:${{ github.sha }}
+            inventratech/inventra-api:latest
+
+      - name: "Deploy (placeholder)"
+        run: |
+          echo "======================================"
+          echo "  Deploy do inventra-api"
+          echo "  Imagem: ghcr.io/inventratech/inventra-api:${{ github.sha }}"
+          echo "======================================"
+          echo "TODO: substituir por deploy real (SSH/k3s) quando M2 estiver definido"
