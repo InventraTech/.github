@@ -29,6 +29,12 @@ jobs:
 
       - name: "Rodar testes"
         run: ./mvnw -B -ntp test
+        env:
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_PORT: ${{ secrets.DB_PORT }}
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
 
       - name: "Compilar e empacotar o projeto"
         run: ./mvnw -B -ntp package -DskipTests
