@@ -58,17 +58,17 @@ A organização tem um time criado no GitHub, o **2° Ano**. Quem está nesse ti
 
 ### 2º ano — time "2° Ano"
 
-- [@dvarakaki](https://github.com/dvarakaki) — Arakaki
-- [@EduardoPassosdeQueiroz](https://github.com/EduardoPassosdeQueiroz)
-- [@FelipeKogake](https://github.com/FelipeKogake)
+- [@dvarakaki](https://github.com/dvarakaki) — Davi Arakaki
+- [@EduardoPassosdeQueiroz](https://github.com/EduardoPassosdeQueiroz) — Eduardo Passos
+- [@FelipeKogake](https://github.com/FelipeKogake) — Felipe Kogake
 - [@JonesPrado](https://github.com/JonesPrado) — João Victor Prado
 - [@joohnyxxz](https://github.com/joohnyxxz) — João Vitor
-- [@RafaelPassosQueiroz](https://github.com/RafaelPassosQueiroz) — Rafael Passos de Queiroz
+- [@RafaelPassosQueiroz](https://github.com/RafaelPassosQueiroz) — Rafael Passos
 
 ### 1º ano
 
-- [@DelJorgeLlanos](https://github.com/DelJorgeLlanos)
-- [@dudaanjos103-cloud](https://github.com/dudaanjos103-cloud)
+- [@DelJorgeLlanos](https://github.com/DelJorgeLlanos) — Jorge Llanos
+- [@dudaanjos103-cloud](https://github.com/dudaanjos103-cloud) — Maria Eduardo Anjos
 - [@erickaraga0](https://github.com/erickaraga0) — Erick Aragão
-- [@GabrielFlavinho](https://github.com/GabrielFlavinho)
-- [@stellacostaf](https://github.com/stellacostaf)
+- [@GabrielFlavinho](https://github.com/GabrielFlavinho) — Gabriel Favrin
+- [@stellacostaf](https://github.com/stellacostaf) — Stella Costa
