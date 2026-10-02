@@ -1,16 +1,27 @@
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:0B3D2E,50:16794A,100:2EA043&height=220&section=header&text=Inventra&fontSize=80&fontColor=ffffff&fontAlignY=38&desc=Precis%C3%A3o%20digital%20na%20gest%C3%A3o%20de%20estoques%20de%20alimentos&descSize=18&descAlignY=60&animation=fadeIn" width="100%" alt="Inventra" />
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:360082,100:6A00FF&height=140&section=header&animation=fadeIn" width="100%" alt="" />
 
 <div align="center">
 
+<img src="https://raw.githubusercontent.com/InventraTech/.github/main/profile/assets/logo.png" alt="Logo Inventra" width="150" />
+
+<br /><br />
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/InventraTech/.github/main/profile/assets/wordmark-dark.png" />
+  <img src="https://raw.githubusercontent.com/InventraTech/.github/main/profile/assets/wordmark.png" alt="Inventra" width="340" />
+</picture>
+
+### Precisão digital na gestão de estoques de alimentos
+
 <a href="#sobre-o-projeto">
-  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=22&duration=3000&pause=800&color=2EA043&center=true&vCenter=true&width=640&lines=Menos+desperd%C3%ADcio%2C+mais+controle.;Validades+monitoradas+em+tempo+real.;Decis%C3%B5es+de+compra+guiadas+por+dados.;IA+a+servi%C3%A7o+da+cozinha.;Alinhado+ao+ODS+12+da+ONU." alt="Menos desperdício, mais controle." />
+  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=20&duration=3000&pause=800&color=6A00FF&center=true&vCenter=true&width=640&lines=Menos+desperd%C3%ADcio%2C+mais+controle.;Validades+monitoradas+em+tempo+real.;Decis%C3%B5es+de+compra+guiadas+por+dados.;IA+a+servi%C3%A7o+da+cozinha.;Alinhado+ao+ODS+12+da+ONU." alt="Menos desperdício, mais controle." />
 </a>
 
 <br /><br />
 
-<a href="https://brasil.un.org/pt-br/sdgs/12"><img src="https://img.shields.io/badge/ODS_12-Consumo_e_Produção_Responsáveis-BF8B2E?style=for-the-badge&logo=unitednations&logoColor=white" alt="ODS 12" /></a>
-<img src="https://img.shields.io/badge/Ensino_Médio_Técnico-2026-1F6FEB?style=for-the-badge&logo=bookstack&logoColor=white" alt="Ensino Médio Técnico 2026" />
-<a href="https://github.com/orgs/InventraTech/repositories"><img src="https://img.shields.io/badge/Status-Em_desenvolvimento-2EA043?style=for-the-badge&logo=githubactions&logoColor=white" alt="Em desenvolvimento" /></a>
+<a href="https://brasil.un.org/pt-br/sdgs/12"><img src="https://img.shields.io/badge/ODS_12-Consumo_e_Produção_Responsáveis-ECC506?style=for-the-badge&logo=unitednations&logoColor=360082&labelColor=FFDE3B" alt="ODS 12" /></a>
+<img src="https://img.shields.io/badge/Ensino_Médio_Técnico-2026-6A00FF?style=for-the-badge&logo=bookstack&logoColor=white&labelColor=360082" alt="Ensino Médio Técnico 2026" />
+<a href="https://github.com/orgs/InventraTech/repositories"><img src="https://img.shields.io/badge/Status-Em_desenvolvimento-6A00FF?style=for-the-badge&logo=githubactions&logoColor=white&labelColor=360082" alt="Em desenvolvimento" /></a>
 
 <br /><br />
 
@@ -77,9 +88,9 @@ Um ecossistema digital de ponta a ponta para **registrar, acompanhar e analisar*
 
 | Meta | Descrição | Como o Inventra contribui |
 |:-:|---|---|
-| ![12.3](https://img.shields.io/badge/12.3-BF8B2E?style=flat-square) | Redução do desperdício de alimentos | **Foco principal:** evitar que insumos vençam no estoque |
-| ![12.5](https://img.shields.io/badge/12.5-BF8B2E?style=flat-square) | Redução da geração de resíduos | Menos descarte de alimentos e dos recursos usados para produzi-los |
-| ![12.8](https://img.shields.io/badge/12.8-BF8B2E?style=flat-square) | Conscientização para o consumo responsável | Métricas e alertas incentivam uma cultura de gestão consciente |
+| ![12.3](https://img.shields.io/badge/12.3-ECC506?style=flat-square) | Redução do desperdício de alimentos | **Foco principal:** evitar que insumos vençam no estoque |
+| ![12.5](https://img.shields.io/badge/12.5-ECC506?style=flat-square) | Redução da geração de resíduos | Menos descarte de alimentos e dos recursos usados para produzi-los |
+| ![12.8](https://img.shields.io/badge/12.8-ECC506?style=flat-square) | Conscientização para o consumo responsável | Métricas e alertas incentivam uma cultura de gestão consciente |
 
 ## Arquitetura
 
@@ -111,6 +122,13 @@ flowchart LR
     API --> RD
     API --> NJ
     MAPI --> MG
+
+    classDef cliente fill:#6A00FF,stroke:#360082,color:#ffffff
+    classDef servico fill:#360082,stroke:#6A00FF,color:#ffffff
+    classDef dado fill:#FFDE3B,stroke:#ECC506,color:#360082
+    class WEB,MOB cliente
+    class API,MAPI,IA servico
+    class PG,RD,NJ,MG dado
 ```
 
 <sub>Visão geral das frentes de desenvolvimento. A infraestrutura (Docker e CI/CD com GitHub Actions) é mantida pela frente de Operações Ágeis.</sub>
@@ -134,14 +152,14 @@ flowchart LR
 
 | Repositório | Frente | Descrição | Atividade |
 |---|---|---|---|
-| [**data-modeling**](https://github.com/InventraTech/inventra-data-modeling-2) | Arte e Modelagem de Dados | Modelagem e scripts do banco relacional (PostgreSQL) | ![](https://img.shields.io/github/last-commit/InventraTech/inventra-data-modeling-2?style=flat-square&label=&color=2EA043) |
-| [**spring-redis-neo4j**](https://github.com/InventraTech/inventra-development-spring-redis-neo4j-2) | Desenvolvimento | API em Spring, com Redis e Neo4j | ![](https://img.shields.io/github/last-commit/InventraTech/inventra-development-spring-redis-neo4j-2?style=flat-square&label=&color=2EA043) |
-| [**development-mongo**](https://github.com/InventraTech/inventra-development-mongo-2) | Desenvolvimento | API em Spring para o banco não relacional MongoDB | ![](https://img.shields.io/github/last-commit/InventraTech/inventra-development-mongo-2?style=flat-square&label=&color=2EA043) |
-| [**dynamic-applications**](https://github.com/InventraTech/inventra-dynamic-applications-2) | Aplicações Dinâmicas | Front-end em React, TypeScript e Tailwind CSS | ![](https://img.shields.io/github/last-commit/InventraTech/inventra-dynamic-applications-2?style=flat-square&label=&color=2EA043) |
-| [**artificial-intelligence**](https://github.com/InventraTech/inventra-artificial-intelligence-2) | Inteligência Artificial | Sistema multiagente para estoquistas, compradores e supervisores | ![](https://img.shields.io/github/last-commit/InventraTech/inventra-artificial-intelligence-2?style=flat-square&label=&color=2EA043) |
-| [**mobile-development**](https://github.com/InventraTech/inventra-mobile-development-2) | Desenvolvimento Mobile | Aplicativo mobile do Inventra | ![](https://img.shields.io/github/last-commit/InventraTech/inventra-mobile-development-2?style=flat-square&label=&color=2EA043) |
-| [**agile-operations**](https://github.com/InventraTech/inventra-agile-operations-development-2) | Operações Ágeis | Automação, infraestrutura, conteinerização e implantação | ![](https://img.shields.io/github/last-commit/InventraTech/inventra-agile-operations-development-2?style=flat-square&label=&color=2EA043) |
-| [**software-engineering**](https://github.com/InventraTech/inventra-software-engineering-2) | Engenharia e Qualidade de Software | Levantamento e documentação de requisitos | ![](https://img.shields.io/github/last-commit/InventraTech/inventra-software-engineering-2?style=flat-square&label=&color=2EA043) |
+| [**data-modeling**](https://github.com/InventraTech/inventra-data-modeling-2) | Arte e Modelagem de Dados | Modelagem e scripts do banco relacional (PostgreSQL) | ![](https://img.shields.io/github/last-commit/InventraTech/inventra-data-modeling-2?style=flat-square&label=&color=6A00FF) |
+| [**spring-redis-neo4j**](https://github.com/InventraTech/inventra-development-spring-redis-neo4j-2) | Desenvolvimento | API em Spring, com Redis e Neo4j | ![](https://img.shields.io/github/last-commit/InventraTech/inventra-development-spring-redis-neo4j-2?style=flat-square&label=&color=6A00FF) |
+| [**development-mongo**](https://github.com/InventraTech/inventra-development-mongo-2) | Desenvolvimento | API em Spring para o banco não relacional MongoDB | ![](https://img.shields.io/github/last-commit/InventraTech/inventra-development-mongo-2?style=flat-square&label=&color=6A00FF) |
+| [**dynamic-applications**](https://github.com/InventraTech/inventra-dynamic-applications-2) | Aplicações Dinâmicas | Front-end em React, TypeScript e Tailwind CSS | ![](https://img.shields.io/github/last-commit/InventraTech/inventra-dynamic-applications-2?style=flat-square&label=&color=6A00FF) |
+| [**artificial-intelligence**](https://github.com/InventraTech/inventra-artificial-intelligence-2) | Inteligência Artificial | Sistema multiagente para estoquistas, compradores e supervisores | ![](https://img.shields.io/github/last-commit/InventraTech/inventra-artificial-intelligence-2?style=flat-square&label=&color=6A00FF) |
+| [**mobile-development**](https://github.com/InventraTech/inventra-mobile-development-2) | Desenvolvimento Mobile | Aplicativo mobile do Inventra | ![](https://img.shields.io/github/last-commit/InventraTech/inventra-mobile-development-2?style=flat-square&label=&color=6A00FF) |
+| [**agile-operations**](https://github.com/InventraTech/inventra-agile-operations-development-2) | Operações Ágeis | Automação, infraestrutura, conteinerização e implantação | ![](https://img.shields.io/github/last-commit/InventraTech/inventra-agile-operations-development-2?style=flat-square&label=&color=6A00FF) |
+| [**software-engineering**](https://github.com/InventraTech/inventra-software-engineering-2) | Engenharia e Qualidade de Software | Levantamento e documentação de requisitos | ![](https://img.shields.io/github/last-commit/InventraTech/inventra-software-engineering-2?style=flat-square&label=&color=6A00FF) |
 
 <details>
 <summary><b>1º ano</b> — clique para expandir</summary>
@@ -224,4 +242,4 @@ flowchart LR
 
 </div>
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:2EA043,50:16794A,100:0B3D2E&height=120&section=footer" width="100%" alt="" />
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:6A00FF,100:360082&height=120&section=footer" width="100%" alt="" />
