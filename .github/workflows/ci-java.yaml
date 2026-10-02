@@ -15,10 +15,10 @@ jobs:
 
     steps:
       - name: "Checkout do código"
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: "Configurar JDK 21"
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: ${{ inputs.java-version }}
@@ -35,6 +35,10 @@ jobs:
           DB_NAME: ${{ secrets.DB_NAME }}
           DB_USER: ${{ secrets.DB_USER }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          REDIS_HOST: ${{ secrets.REDIS_HOST }}
+          REDIS_PORT: ${{ secrets.REDIS_PORT }}
+          REDIS_USERNAME: ${{ secrets.REDIS_USERNAME }}
+          REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
 
       - name: "Compilar e empacotar o projeto"
         run: ./mvnw -B -ntp package -DskipTests
