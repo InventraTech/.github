@@ -1,74 +1,227 @@
-# Inventra
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:0B3D2E,50:16794A,100:2EA043&height=220&section=header&text=Inventra&fontSize=80&fontColor=ffffff&fontAlignY=38&desc=Precis%C3%A3o%20digital%20na%20gest%C3%A3o%20de%20estoques%20de%20alimentos&descSize=18&descAlignY=60&animation=fadeIn" width="100%" alt="Inventra" />
+
+<div align="center">
+
+<a href="#sobre-o-projeto">
+  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=22&duration=3000&pause=800&color=2EA043&center=true&vCenter=true&width=640&lines=Menos+desperd%C3%ADcio%2C+mais+controle.;Validades+monitoradas+em+tempo+real.;Decis%C3%B5es+de+compra+guiadas+por+dados.;IA+a+servi%C3%A7o+da+cozinha.;Alinhado+ao+ODS+12+da+ONU." alt="Menos desperdício, mais controle." />
+</a>
+
+<br /><br />
+
+<a href="https://brasil.un.org/pt-br/sdgs/12"><img src="https://img.shields.io/badge/ODS_12-Consumo_e_Produção_Responsáveis-BF8B2E?style=for-the-badge&logo=unitednations&logoColor=white" alt="ODS 12" /></a>
+<img src="https://img.shields.io/badge/Ensino_Médio_Técnico-2026-1F6FEB?style=for-the-badge&logo=bookstack&logoColor=white" alt="Ensino Médio Técnico 2026" />
+<a href="https://github.com/orgs/InventraTech/repositories"><img src="https://img.shields.io/badge/Status-Em_desenvolvimento-2EA043?style=for-the-badge&logo=githubactions&logoColor=white" alt="Em desenvolvimento" /></a>
+
+<br /><br />
+
+<b>
+<a href="#sobre-o-projeto">Sobre</a> ·
+<a href="#funcionalidades">Funcionalidades</a> ·
+<a href="#ods-12--consumo-e-produção-responsáveis">ODS 12</a> ·
+<a href="#arquitetura">Arquitetura</a> ·
+<a href="#tecnologias">Tecnologias</a> ·
+<a href="#repositórios">Repositórios</a> ·
+<a href="#equipe">Equipe</a>
+</b>
+
+</div>
+
+<br />
+
+## Sobre o projeto
 
 **Inventra** é um projeto interdisciplinar de Ensino Médio técnico, desenvolvido em 2026 e alinhado ao **ODS 12 — Consumo e Produção Responsáveis** da Agenda 2030 da ONU. A proposta é levar **precisão digital à gestão de estoques de alimentos**, reduzindo o desperdício em restaurantes, cozinhas industriais e outras operações gastronômicas.
 
-## O problema
+<table>
+<tr>
+<td width="50%" valign="top">
 
-Muitas operações de alimentação ainda controlam o estoque de forma informal — por memória, planilhas desatualizadas ou "olhômetro". Isso torna a conferência lenta, reduz a rastreabilidade e aumenta o risco de compras mal planejadas, insumos vencidos e desperdício financeiro.
+### O problema
 
-## A solução
+Muitas operações de alimentação ainda controlam o estoque de forma informal — por memória, planilhas desatualizadas ou "olhômetro". Isso torna a conferência lenta, reduz a rastreabilidade e aumenta o risco de **compras mal planejadas**, **insumos vencidos** e **desperdício financeiro**.
 
-O Inventra propõe um ecossistema digital de ponta a ponta para registrar, acompanhar e analisar o estoque: cadastro de produtos por foto/OCR ou manual, monitoramento de quantidades e validades, alertas de vencimento, indicadores em dashboard, requisições de compra, histórico de movimentações e um assistente de IA (**IAI**) para apoiar a operação.
+</td>
+<td width="50%" valign="top">
 
-> As telas do produto existem hoje como protótipo de alta fidelidade (design), com fluxos e regras ainda em especificação e implementação pelas frentes listadas abaixo.
+### A solução
+
+Um ecossistema digital de ponta a ponta para **registrar, acompanhar e analisar** o estoque, com indicadores claros e um assistente de IA (**IAI**) que apoia estoquistas, compradores e supervisores no dia a dia.
+
+</td>
+</tr>
+</table>
+
+**Público-alvo:** equipes de estoque, gerentes, proprietários e compradores de restaurantes e outros serviços de alimentação.
+
+## Funcionalidades
+
+<table>
+<tr>
+<td align="center" width="25%"><b>Cadastro inteligente</b><br /><sub>Por foto/OCR ou manual</sub></td>
+<td align="center" width="25%"><b>Controle de estoque</b><br /><sub>Quantidades e validades</sub></td>
+<td align="center" width="25%"><b>Alertas</b><br /><sub>Avisos de vencimento</sub></td>
+<td align="center" width="25%"><b>Dashboard</b><br /><sub>Indicadores da operação</sub></td>
+</tr>
+<tr>
+<td align="center"><b>Requisições</b><br /><sub>Pedidos de compra</sub></td>
+<td align="center"><b>Histórico</b><br /><sub>Movimentações rastreáveis</sub></td>
+<td align="center"><b>IAI</b><br /><sub>Assistente multiagente</sub></td>
+<td align="center"><b>Web e mobile</b><br /><sub>Acesso em qualquer lugar</sub></td>
+</tr>
+</table>
+
+> [!NOTE]
+> As telas do produto existem hoje como protótipo de alta fidelidade, com fluxos e regras ainda em especificação e implementação pelas frentes listadas abaixo.
 
 ## ODS 12 — Consumo e Produção Responsáveis
 
-O projeto se conecta a três metas da ODS 12:
+| Meta | Descrição | Como o Inventra contribui |
+|:-:|---|---|
+| ![12.3](https://img.shields.io/badge/12.3-BF8B2E?style=flat-square) | Redução do desperdício de alimentos | **Foco principal:** evitar que insumos vençam no estoque |
+| ![12.5](https://img.shields.io/badge/12.5-BF8B2E?style=flat-square) | Redução da geração de resíduos | Menos descarte de alimentos e dos recursos usados para produzi-los |
+| ![12.8](https://img.shields.io/badge/12.8-BF8B2E?style=flat-square) | Conscientização para o consumo responsável | Métricas e alertas incentivam uma cultura de gestão consciente |
 
-- **12.3 — Redução do desperdício de alimentos**: foco principal, evitando que insumos vençam no estoque.
-- **12.5 — Redução da geração de resíduos**: menos descarte de alimentos e dos recursos usados para produzi-los.
-- **12.8 — Conscientização para o consumo responsável**: métricas e alertas incentivam uma cultura de gestão consciente de insumos.
+## Arquitetura
 
-## Público-alvo
+```mermaid
+flowchart LR
+    subgraph Clientes
+        WEB["Web<br/>React + TypeScript"]
+        MOB["Mobile<br/>Kotlin"]
+    end
 
-Equipes de estoque, gerentes, proprietários e compradores de restaurantes e outros serviços de alimentação.
+    subgraph Backend
+        API["API Spring<br/>Redis + Neo4j"]
+        MAPI["API Spring<br/>MongoDB"]
+        IA["IAI<br/>Python · multiagente"]
+    end
+
+    subgraph Dados
+        PG[("PostgreSQL")]
+        RD[("Redis")]
+        NJ[("Neo4j")]
+        MG[("MongoDB")]
+    end
+
+    WEB --> API
+    MOB --> API
+    WEB --> MAPI
+    WEB --> IA
+    API --> PG
+    API --> RD
+    API --> NJ
+    MAPI --> MG
+```
+
+<sub>Visão geral das frentes de desenvolvimento. A infraestrutura (Docker e CI/CD com GitHub Actions) é mantida pela frente de Operações Ágeis.</sub>
+
+## Tecnologias
+
+<div align="center">
+
+<img src="https://skillicons.dev/icons?i=react,ts,tailwind,java,spring,kotlin,python&perline=7" alt="Linguagens e frameworks" />
+<br /><br />
+<img src="https://skillicons.dev/icons?i=postgres,mongodb,redis,docker,githubactions,git,github&perline=7" alt="Dados e infraestrutura" />
+<br /><br />
+<img src="https://img.shields.io/badge/Neo4j-4581C3?style=for-the-badge&logo=neo4j&logoColor=white" alt="Neo4j" />
+<img src="https://img.shields.io/badge/Jupyter-F37626?style=for-the-badge&logo=jupyter&logoColor=white" alt="Jupyter" />
+
+</div>
 
 ## Repositórios
 
-Repositórios com sufixo `-2` são do 2º ano; os com prefixo `Inventra1`/`inventra1` são do 1º ano.
-
 ### 2º ano
 
-| Repositório | Disciplina / Frente | Descrição |
+| Repositório | Frente | Descrição | Atividade |
+|---|---|---|---|
+| [**data-modeling**](https://github.com/InventraTech/inventra-data-modeling-2) | Arte e Modelagem de Dados | Modelagem e scripts do banco relacional (PostgreSQL) | ![](https://img.shields.io/github/last-commit/InventraTech/inventra-data-modeling-2?style=flat-square&label=&color=2EA043) |
+| [**spring-redis-neo4j**](https://github.com/InventraTech/inventra-development-spring-redis-neo4j-2) | Desenvolvimento | API em Spring, com Redis e Neo4j | ![](https://img.shields.io/github/last-commit/InventraTech/inventra-development-spring-redis-neo4j-2?style=flat-square&label=&color=2EA043) |
+| [**development-mongo**](https://github.com/InventraTech/inventra-development-mongo-2) | Desenvolvimento | API em Spring para o banco não relacional MongoDB | ![](https://img.shields.io/github/last-commit/InventraTech/inventra-development-mongo-2?style=flat-square&label=&color=2EA043) |
+| [**dynamic-applications**](https://github.com/InventraTech/inventra-dynamic-applications-2) | Aplicações Dinâmicas | Front-end em React, TypeScript e Tailwind CSS | ![](https://img.shields.io/github/last-commit/InventraTech/inventra-dynamic-applications-2?style=flat-square&label=&color=2EA043) |
+| [**artificial-intelligence**](https://github.com/InventraTech/inventra-artificial-intelligence-2) | Inteligência Artificial | Sistema multiagente para estoquistas, compradores e supervisores | ![](https://img.shields.io/github/last-commit/InventraTech/inventra-artificial-intelligence-2?style=flat-square&label=&color=2EA043) |
+| [**mobile-development**](https://github.com/InventraTech/inventra-mobile-development-2) | Desenvolvimento Mobile | Aplicativo mobile do Inventra | ![](https://img.shields.io/github/last-commit/InventraTech/inventra-mobile-development-2?style=flat-square&label=&color=2EA043) |
+| [**agile-operations**](https://github.com/InventraTech/inventra-agile-operations-development-2) | Operações Ágeis | Automação, infraestrutura, conteinerização e implantação | ![](https://img.shields.io/github/last-commit/InventraTech/inventra-agile-operations-development-2?style=flat-square&label=&color=2EA043) |
+| [**software-engineering**](https://github.com/InventraTech/inventra-software-engineering-2) | Engenharia e Qualidade de Software | Levantamento e documentação de requisitos | ![](https://img.shields.io/github/last-commit/InventraTech/inventra-software-engineering-2?style=flat-square&label=&color=2EA043) |
+
+<details>
+<summary><b>1º ano</b> — clique para expandir</summary>
+<br />
+
+| Repositório | Disciplina | Descrição |
 |---|---|---|
-| [inventra-data-modeling-2](https://github.com/InventraTech/inventra-data-modeling-2) | Arte e Modelagem de Dados | Modelagem e scripts do banco de dados relacional (PostgreSQL) |
-| [inventra-development-spring-redis-neo4j-2](https://github.com/InventraTech/inventra-development-spring-redis-neo4j-2) | Desenvolvimento | API em Spring, com Redis e Neo4j |
-| [inventra-development-mongo-2](https://github.com/InventraTech/inventra-development-mongo-2) | Desenvolvimento | API em Spring para consumo do banco não relacional MongoDB |
-| [inventra-dynamic-applications-2](https://github.com/InventraTech/inventra-dynamic-applications-2) | Desenvolvimento de Aplicações Dinâmicas | Front-end em React, TypeScript e Tailwind CSS |
-| [inventra-artificial-intelligence-2](https://github.com/InventraTech/inventra-artificial-intelligence-2) | Inteligência Artificial | Sistema multiagente para suporte a estoquistas, compradores e supervisores |
-| [inventra-mobile-development-2](https://github.com/InventraTech/inventra-mobile-development-2) | Desenvolvimento Mobile | Aplicativo mobile do Inventra |
-| [inventra-agile-operations-development-2](https://github.com/InventraTech/inventra-agile-operations-development-2) | Desenvolvimento de Operações Ágeis | Automação, infraestrutura, conteinerização e implantação |
-| [inventra-software-engineering-2](https://github.com/InventraTech/inventra-software-engineering-2) | Engenharia e Qualidade de Software | Levantamento e documentação de requisitos do sistema |
+| [**Inventra1-BD**](https://github.com/InventraTech/Inventra1-BD) | Banco de Dados | Projetos de banco de dados do 1º ano |
+| [**inventra1-poo**](https://github.com/InventraTech/inventra1-poo) | Programação Orientada a Objetos | Demandas de POO do 1º ano |
+| [**Inventra1-POO-LPR**](https://github.com/InventraTech/Inventra1-POO-LPR) | POO / LPR | Projetos de POO/LPR do 1º ano |
+| [**Inventra1-HTML**](https://github.com/InventraTech/Inventra1-HTML) | HTML | Projetos de HTML do 1º ano |
 
-### 1º ano
+</details>
 
-| Repositório | Disciplina / Frente | Descrição |
-|---|---|---|
-| [Inventra1-BD](https://github.com/InventraTech/Inventra1-BD) | Banco de Dados | Projetos de banco de dados (BD) do 1º ano |
-| [inventra1-poo](https://github.com/InventraTech/inventra1-poo) | Programação Orientada a Objetos | Demandas de POO do 1º ano |
-| [Inventra1-POO-LPR](https://github.com/InventraTech/Inventra1-POO-LPR) | POO / LPR | Projetos de POO/LPR do 1º ano |
-| [Inventra1-HTML](https://github.com/InventraTech/Inventra1-HTML) | HTML | Projetos de HTML do 1º ano |
-
-O repositório [.github](https://github.com/InventraTech/.github) (este) reúne as configurações padrão da organização: README de perfil, template de Pull Request e workflows de CI/CD reutilizáveis.
+<sub>O repositório [.github](https://github.com/InventraTech/.github) reúne as configurações padrão da organização: README de perfil, template de Pull Request e workflows de CI/CD reutilizáveis.</sub>
 
 ## Equipe
 
-A organização tem um time criado no GitHub, o **2° Ano**. Quem está nesse time é do 2º ano; os demais membros da organização são do 1º ano.
+<div align="center">
 
-### 2º ano — time "2° Ano"
+### 2º ano
 
-- [@dvarakaki](https://github.com/dvarakaki) — Arakaki
-- [@EduardoPassosdeQueiroz](https://github.com/EduardoPassosdeQueiroz)
-- [@FelipeKogake](https://github.com/FelipeKogake)
-- [@JonesPrado](https://github.com/JonesPrado) — João Victor Prado
-- [@joohnyxxz](https://github.com/joohnyxxz) — João Vitor
-- [@RafaelPassosQueiroz](https://github.com/RafaelPassosQueiroz) — Rafael Passos de Queiroz
+<table>
+<tr>
+<td align="center" width="150">
+<a href="https://github.com/dvarakaki"><img src="https://github.com/dvarakaki.png?size=200" width="100" alt="Davi Arakaki" /><br /><b>Davi Arakaki</b></a><br /><sub>@dvarakaki</sub>
+</td>
+<td align="center" width="150">
+<a href="https://github.com/EduardoPassosdeQueiroz"><img src="https://github.com/EduardoPassosdeQueiroz.png?size=200" width="100" alt="Eduardo Passos" /><br /><b>Eduardo Passos</b></a><br /><sub>@EduardoPassosdeQueiroz</sub>
+</td>
+<td align="center" width="150">
+<a href="https://github.com/FelipeKogake"><img src="https://github.com/FelipeKogake.png?size=200" width="100" alt="Felipe Kogake" /><br /><b>Felipe Kogake</b></a><br /><sub>@FelipeKogake</sub>
+</td>
+</tr>
+<tr>
+<td align="center" width="150">
+<a href="https://github.com/JonesPrado"><img src="https://github.com/JonesPrado.png?size=200" width="100" alt="João Victor Prado" /><br /><b>João Victor Prado</b></a><br /><sub>@JonesPrado</sub>
+</td>
+<td align="center" width="150">
+<a href="https://github.com/joohnyxxz"><img src="https://github.com/joohnyxxz.png?size=200" width="100" alt="João Vitor Maldonado" /><br /><b>João Vitor Maldonado</b></a><br /><sub>@joohnyxxz</sub>
+</td>
+<td align="center" width="150">
+<a href="https://github.com/RafaelPassosQueiroz"><img src="https://github.com/RafaelPassosQueiroz.png?size=200" width="100" alt="Rafael Passos" /><br /><b>Rafael Passos</b></a><br /><sub>@RafaelPassosQueiroz</sub>
+</td>
+</tr>
+</table>
 
 ### 1º ano
 
-- [@DelJorgeLlanos](https://github.com/DelJorgeLlanos)
-- [@dudaanjos103-cloud](https://github.com/dudaanjos103-cloud)
-- [@erickaraga0](https://github.com/erickaraga0) — Erick Aragão
-- [@GabrielFlavinho](https://github.com/GabrielFlavinho)
-- [@stellacostaf](https://github.com/stellacostaf)
+<table>
+<tr>
+<td align="center" width="150">
+<a href="https://github.com/DelJorgeLlanos"><img src="https://github.com/DelJorgeLlanos.png?size=200" width="100" alt="Jorge Llanos" /><br /><b>Jorge Llanos</b></a><br /><sub>@DelJorgeLlanos</sub>
+</td>
+<td align="center" width="150">
+<a href="https://github.com/dudaanjos103-cloud"><img src="https://github.com/dudaanjos103-cloud.png?size=200" width="100" alt="Maria Eduarda Anjos" /><br /><b>Maria Eduarda Anjos</b></a><br /><sub>@dudaanjos103-cloud</sub>
+</td>
+<td align="center" width="150">
+<a href="https://github.com/erickaraga0"><img src="https://github.com/erickaraga0.png?size=200" width="100" alt="Erick Aragão" /><br /><b>Erick Aragão</b></a><br /><sub>@erickaraga0</sub>
+</td>
+</tr>
+<tr>
+<td align="center" width="150">
+<a href="https://github.com/GabrielFlavinho"><img src="https://github.com/GabrielFlavinho.png?size=200" width="100" alt="Gabriel Favrin" /><br /><b>Gabriel Favrin</b></a><br /><sub>@GabrielFlavinho</sub>
+</td>
+<td align="center" width="150">
+<a href="https://github.com/stellacostaf"><img src="https://github.com/stellacostaf.png?size=200" width="100" alt="Stella Costa" /><br /><b>Stella Costa</b></a><br /><sub>@stellacostaf</sub>
+</td>
+<td align="center" width="150"></td>
+</tr>
+</table>
+
+</div>
+
+<br />
+
+<div align="center">
+
+<sub>Desenvolvido pela equipe <b>Inventra</b> · Alinhado à <a href="https://brasil.un.org/pt-br/sdgs/12">Agenda 2030 da ONU</a></sub>
+
+</div>
+
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:2EA043,50:16794A,100:0B3D2E&height=120&section=footer" width="100%" alt="" />
