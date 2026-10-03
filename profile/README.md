@@ -2,16 +2,9 @@
 
 <div align="center">
 
-<img src="https://raw.githubusercontent.com/InventraTech/.github/main/profile/assets/logo.png" alt="Logo Inventra" width="150" />
+<img src="https://raw.githubusercontent.com/InventraTech/.github/main/profile/assets/hero.svg" alt="Inventra — precisão digital na gestão de estoques de alimentos" width="100%" />
 
 <br /><br />
-
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/InventraTech/.github/main/profile/assets/wordmark-dark.png" />
-  <img src="https://raw.githubusercontent.com/InventraTech/.github/main/profile/assets/wordmark.png" alt="Inventra" width="340" />
-</picture>
-
-### Precisão digital na gestão de estoques de alimentos
 
 <a href="#sobre-o-projeto">
   <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=20&duration=3000&pause=800&color=6A00FF&center=true&vCenter=true&width=640&lines=Menos+desperd%C3%ADcio%2C+mais+controle.;Validades+monitoradas+em+tempo+real.;Decis%C3%B5es+de+compra+guiadas+por+dados.;IA+a+servi%C3%A7o+da+cozinha.;Alinhado+ao+ODS+12+da+ONU." alt="Menos desperdício, mais controle." />
