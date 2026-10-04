@@ -11,8 +11,13 @@ on:
         required: false
         type: string
         default: "InventraTech/inventra-gitops"
+      image-name:
+        description: "Nome da imagem no GHCR sob o dono do repo (padrão: nome do repo do serviço)"
+        required: false
+        type: string
+        default: ""
       gitops-app:
-        description: "Pasta do app em apps/ no repo gitops (padrão: nome do repo do serviço)"
+        description: "Pasta do app em apps/ no repo gitops (padrão: image-name, ou o nome do repo)"
         required: false
         type: string
         default: ""
@@ -20,6 +25,9 @@ on:
       GITOPS_APP_KEY:
         description: "Chave privada do GitHub App com escrita no repo gitops"
         required: true
+      GITOPS_APP_ID:
+        description: "ID do GitHub App (alternativa à variável GITOPS_APP_ID)"
+        required: false
 
 # Evita duas releases do mesmo serviço mexendo no gitops ao mesmo tempo.
 concurrency:
@@ -69,9 +77,14 @@ jobs:
 
       - name: "Definir nome da imagem"
         id: meta
+        env:
+          IMAGE_NAME: ${{ inputs.image-name }}
+          REPO_NAME: ${{ github.event.repository.name }}
+          OWNER: ${{ github.repository_owner }}
         # GHCR exige nome em minúsculas.
         run: |
-          IMAGE="ghcr.io/${GITHUB_REPOSITORY,,}"
+          NAME="${IMAGE_NAME:-$REPO_NAME}"
+          IMAGE="ghcr.io/${OWNER,,}/${NAME,,}"
           echo "image=${IMAGE}" >> "$GITHUB_OUTPUT"
 
       - name: "Configurar Buildx"
@@ -91,6 +104,7 @@ jobs:
           load: true
           push: false
           tags: ${{ steps.meta.outputs.image }}:${{ github.ref_name }}
+          labels: org.opencontainers.image.source=https://github.com/${{ github.repository }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -110,6 +124,7 @@ jobs:
           push: true
           # Só a tag imutável da versão; sem `latest`.
           tags: ${{ steps.meta.outputs.image }}:${{ github.ref_name }}
+          labels: org.opencontainers.image.source=https://github.com/${{ github.repository }}
           cache-from: type=gha
 
   update-gitops:
@@ -131,7 +146,7 @@ jobs:
         id: app-token
         uses: actions/create-github-app-token@v2
         with:
-          app-id: ${{ vars.GITOPS_APP_ID }}
+          app-id: ${{ secrets.GITOPS_APP_ID || vars.GITOPS_APP_ID }}
           private-key: ${{ secrets.GITOPS_APP_KEY }}
           owner: ${{ steps.gitops.outputs.owner }}
           repositories: ${{ steps.gitops.outputs.name }}
@@ -146,9 +161,10 @@ jobs:
         env:
           TAG: ${{ github.ref_name }}
           APP_INPUT: ${{ inputs.gitops-app }}
+          IMAGE_NAME: ${{ inputs.image-name }}
           REPO_NAME: ${{ github.event.repository.name }}
         run: |
-          APP="${APP_INPUT:-$REPO_NAME}"
+          APP="${APP_INPUT:-${IMAGE_NAME:-$REPO_NAME}}"
           FILE="apps/${APP}/overlays/prod/kustomization.yaml"
           test -f "$FILE" || { echo "::error::$FILE não existe no repo gitops."; exit 1; }
           if [[ "$(grep -cE '^[[:space:]]*newTag:' "$FILE")" != "1" ]]; then
