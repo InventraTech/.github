@@ -1,19 +1,81 @@
 name: "Java Continuous Deployment"
 
+# Deploy por tag: `vX.Y.Z` -> imagem no GHCR -> PR de bump no repo gitops -> Argo CD.
+# O workflow chamador deve disparar em `push: tags: ['v*']` (ver exemplo no README do gitops).
+
 on:
   workflow_call:
+    inputs:
+      gitops-repo:
+        description: "Repositório gitops (owner/nome) que recebe a PR de bump"
+        required: false
+        type: string
+        default: "InventraTech/inventra-gitops"
+      gitops-app:
+        description: "Pasta do app em apps/ no repo gitops (padrão: nome do repo do serviço)"
+        required: false
+        type: string
+        default: ""
+    secrets:
+      GITOPS_APP_KEY:
+        description: "Chave privada do GitHub App com escrita no repo gitops"
+        required: true
+
+# Evita duas releases do mesmo serviço mexendo no gitops ao mesmo tempo.
+concurrency:
+  group: cd-${{ github.repository }}
+  cancel-in-progress: false
 
 jobs:
+  validate-tag:
+    name: "Validar tag de release"
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: "Checkout do código"
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: "Exigir tag vX.Y.Z"
+        run: |
+          if [[ "${GITHUB_REF_TYPE}" != "tag" ]] || [[ ! "${GITHUB_REF_NAME}" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::error::Este workflow só roda em tags no formato vX.Y.Z (recebido: ${GITHUB_REF_TYPE} ${GITHUB_REF_NAME})."
+            exit 1
+          fi
+
+      - name: "Exigir que a tag esteja na main"
+        # Impede release de um commit que nunca passou por PR e CI.
+        run: |
+          git fetch origin main
+          if ! git merge-base --is-ancestor "${GITHUB_SHA}" origin/main; then
+            echo "::error::A tag ${GITHUB_REF_NAME} aponta para um commit fora da main."
+            exit 1
+          fi
+
   build-and-push:
-    name: "Build e Push da imagem Docker"
+    name: "Build, scan e push da imagem"
+    needs: validate-tag
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
-
+    outputs:
+      image: ${{ steps.meta.outputs.image }}
     steps:
       - name: "Checkout do código"
         uses: actions/checkout@v7
+
+      - name: "Definir nome da imagem"
+        id: meta
+        # GHCR exige nome em minúsculas.
+        run: |
+          IMAGE="ghcr.io/${GITHUB_REPOSITORY,,}"
+          echo "image=${IMAGE}" >> "$GITHUB_OUTPUT"
+
+      - name: "Configurar Buildx"
+        uses: docker/setup-buildx-action@v3
 
       - name: "Login no GHCR"
         uses: docker/login-action@v3
@@ -22,27 +84,96 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: "Login no Docker Hub"
-        uses: docker/login-action@v3
+      - name: "Build da imagem (local, para o scan)"
+        uses: docker/build-push-action@v6
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          context: .
+          load: true
+          push: false
+          tags: ${{ steps.meta.outputs.image }}:${{ github.ref_name }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
-      - name: "Build e Push da imagem"
+      - name: "Scan de vulnerabilidades (Trivy)"
+        # Falha a release se houver CVE crítica ou alta com correção disponível.
+        uses: aquasecurity/trivy-action@0.33.1
+        with:
+          image-ref: ${{ steps.meta.outputs.image }}:${{ github.ref_name }}
+          severity: CRITICAL,HIGH
+          ignore-unfixed: true
+          exit-code: "1"
+
+      - name: "Push da imagem"
         uses: docker/build-push-action@v6
         with:
           context: .
           push: true
-          tags: |
-            ghcr.io/inventratech/inventra-api:${{ github.sha }}
-            ghcr.io/inventratech/inventra-api:latest
-            inventratech/inventra-api:${{ github.sha }}
-            inventratech/inventra-api:latest
+          # Só a tag imutável da versão; sem `latest`.
+          tags: ${{ steps.meta.outputs.image }}:${{ github.ref_name }}
+          cache-from: type=gha
 
-      - name: "Deploy (placeholder)"
+  update-gitops:
+    name: "PR de bump no repo gitops"
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: "Separar dono e nome do repo gitops"
+        id: gitops
+        env:
+          GITOPS_REPO: ${{ inputs.gitops-repo }}
         run: |
-          echo "======================================"
-          echo "  Deploy do inventra-api"
-          echo "  Imagem: ghcr.io/inventratech/inventra-api:${{ github.sha }}"
-          echo "======================================"
-          echo "TODO: substituir por deploy real (SSH/k3s) quando M2 estiver definido"
+          echo "owner=${GITOPS_REPO%%/*}" >> "$GITHUB_OUTPUT"
+          echo "name=${GITOPS_REPO#*/}" >> "$GITHUB_OUTPUT"
+
+      - name: "Token do GitHub App (escopo: só o repo gitops)"
+        id: app-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ vars.GITOPS_APP_ID }}
+          private-key: ${{ secrets.GITOPS_APP_KEY }}
+          owner: ${{ steps.gitops.outputs.owner }}
+          repositories: ${{ steps.gitops.outputs.name }}
+
+      - name: "Checkout do repo gitops"
+        uses: actions/checkout@v7
+        with:
+          repository: ${{ inputs.gitops-repo }}
+          token: ${{ steps.app-token.outputs.token }}
+
+      - name: "Atualizar a tag da imagem no overlay de produção"
+        env:
+          TAG: ${{ github.ref_name }}
+          APP_INPUT: ${{ inputs.gitops-app }}
+          REPO_NAME: ${{ github.event.repository.name }}
+        run: |
+          APP="${APP_INPUT:-$REPO_NAME}"
+          FILE="apps/${APP}/overlays/prod/kustomization.yaml"
+          test -f "$FILE" || { echo "::error::$FILE não existe no repo gitops."; exit 1; }
+          if [[ "$(grep -cE '^[[:space:]]*newTag:' "$FILE")" != "1" ]]; then
+            echo "::error::Esperava exatamente uma linha newTag em $FILE."
+            exit 1
+          fi
+          # sed (e não `kustomize edit`) para preservar comentários do arquivo.
+          sed -i -E "s/^([[:space:]]*newTag:[[:space:]]*).*/\1${TAG}/" "$FILE"
+          git --no-pager diff -- "$FILE"
+          echo "APP=${APP}" >> "$GITHUB_ENV"
+
+      - name: "Abrir PR de release"
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+          branch: release/${{ env.APP }}-${{ github.ref_name }}
+          commit-message: "chore: release ${{ env.APP }} ${{ github.ref_name }}"
+          title: "chore: release ${{ env.APP }} ${{ github.ref_name }}"
+          body: |
+            Release automática de **${{ env.APP }}** `${{ github.ref_name }}`.
+
+            - Tag: https://github.com/${{ github.repository }}/releases/tag/${{ github.ref_name }}
+            - Commit: https://github.com/${{ github.repository }}/commit/${{ github.sha }}
+            - Imagem: `${{ needs.build-and-push.outputs.image }}:${{ github.ref_name }}`
+
+            Ao fazer merge, o Argo CD sincroniza a produção.
+            **Rollback:** reverter este commit.
+          delete-branch: true
