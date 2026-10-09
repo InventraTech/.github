@@ -1,0 +1,141 @@
+name: "SQL Continuous Integration"
+
+on:
+  workflow_call:
+    inputs:
+      postgres-version:
+        type: string
+        default: '16'
+      sql-dir:
+        type: string
+        default: 'postgre'
+      migrations-dir:
+        type: string
+        default: 'postgre/09_migrations'
+      rollback-script:
+        type: string
+        default: 'postgre/09_migrations/rollback/drop_everything.sql'
+      lint-rules:
+        description: 'Regras do sqlfluff (PRS = só erros de sintaxe)'
+        type: string
+        default: 'PRS'
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+
+      - name: Instalar sqlfluff
+        run: pip install sqlfluff
+
+      - name: Lint SQL
+        run: sqlfluff lint "${{ inputs.sql-dir }}" --dialect postgres --rules "${{ inputs.lint-rules }}"
+
+  structure:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Todo create_*.sql tem o drop_*.sql correspondente
+        run: |
+          status=0
+          while IFS= read -r f; do
+            dir=$(dirname "$f")
+            name=$(basename "$f")
+            rollback="$dir/rollback/drop_${name#create_}"
+            if [ ! -f "$rollback" ]; then
+              echo "::error file=$f::sem rollback correspondente ($rollback)"
+              status=1
+            fi
+          done < <(find "${{ inputs.sql-dir }}" -name 'create_*.sql' -not -path '*/rollback/*' | sort)
+          exit $status
+
+      - name: Migrations em sequência (V001, V002, ...)
+        run: |
+          expected=1
+          status=0
+          for f in $(ls "${{ inputs.migrations-dir }}"/V*__*.sql | sort); do
+            num=$(basename "$f" | sed -E 's/^V0*([0-9]+)__.*/\1/')
+            if [ "$num" -ne "$expected" ]; then
+              echo "::error file=$f::esperado V$(printf '%03d' "$expected"), encontrado V$(printf '%03d' "$num")"
+              status=1
+              expected=$num
+            fi
+            expected=$((expected + 1))
+          done
+          exit $status
+
+      - name: Migrations já existentes não podem ser alteradas
+        if: github.event_name == 'pull_request'
+        run: |
+          changed=$(git diff --name-status --diff-filter=MDR "origin/${{ github.base_ref }}...HEAD" \
+            -- "${{ inputs.migrations-dir }}/V*__*.sql")
+          if [ -n "$changed" ]; then
+            echo "::error::migrations já publicadas são imutáveis, crie uma nova versão:"
+            echo "$changed"
+            exit 1
+          fi
+
+  migrations:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:${{ inputs.postgres-version }}
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: inventra
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      PGHOST: localhost
+      PGUSER: postgres
+      PGPASSWORD: postgres
+      PGDATABASE: inventra
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Aplicar migrations em ordem
+        run: |
+          for f in $(ls "${{ inputs.migrations-dir }}"/V*__*.sql | sort); do
+            echo "::group::$f"
+            psql -v ON_ERROR_STOP=1 -f "$f"
+            echo "::endgroup::"
+          done
+
+      - name: Rollback completo
+        run: psql -v ON_ERROR_STOP=1 -f "${{ inputs.rollback-script }}"
+
+      - name: Rollback não deixa objetos órfãos
+        run: |
+          orphans=$(psql -At -c "
+            SELECT count(*) FROM pg_class c
+            JOIN pg_namespace n ON n.oid = c.relnamespace
+            WHERE n.nspname = 'public' AND c.relkind IN ('r','v','m','S','p');
+          ")
+          if [ "$orphans" -ne 0 ]; then
+            echo "::error::$orphans objeto(s) restaram em public após o rollback:"
+            psql -c "
+              SELECT c.relname, c.relkind FROM pg_class c
+              JOIN pg_namespace n ON n.oid = c.relnamespace
+              WHERE n.nspname = 'public' AND c.relkind IN ('r','v','m','S','p');
+            "
+            exit 1
+          fi
+
+      - name: Reaplicar migrations após o rollback
+        run: |
+          for f in $(ls "${{ inputs.migrations-dir }}"/V*__*.sql | sort); do
+            psql -v ON_ERROR_STOP=1 -q -f "$f"
+          done
