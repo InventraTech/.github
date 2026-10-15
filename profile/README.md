@@ -1,5 +1,3 @@
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:360082,100:6A00FF&height=140&section=header&animation=fadeIn" width="100%" alt="" />
-
 <div align="center">
 
 <img src="https://raw.githubusercontent.com/InventraTech/.github/main/profile/assets/hero.svg" alt="Inventra — precisão digital na gestão de estoques de alimentos" width="100%" />
