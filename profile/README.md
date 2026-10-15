@@ -143,13 +143,15 @@ flowchart LR
 
 | Repositório | Frente | Descrição | Atividade |
 |---|---|---|---|
-| [**data-modeling**](https://github.com/InventraTech/inventra-data-modeling-2) | Arte e Modelagem de Dados | Modelagem e scripts do banco relacional (PostgreSQL) | ![](https://img.shields.io/github/last-commit/InventraTech/inventra-data-modeling-2?style=flat-square&label=&color=6A00FF) |
+| [**database**](https://github.com/InventraTech/inventra-database-2) | Arte e Modelagem de Dados | Modelagem e scripts do banco relacional (PostgreSQL) | ![](https://img.shields.io/github/last-commit/InventraTech/inventra-database-2?style=flat-square&label=&color=6A00FF) |
+| [**database-rpa**](https://github.com/InventraTech/inventra-database-rpa-2) | Arte e Modelagem de Dados | Automações (RPA) do time do 2º ano | ![](https://img.shields.io/github/last-commit/InventraTech/inventra-database-rpa-2?style=flat-square&label=&color=6A00FF) |
 | [**spring-redis-neo4j**](https://github.com/InventraTech/inventra-development-spring-redis-neo4j-2) | Desenvolvimento | API em Spring, com Redis e Neo4j | ![](https://img.shields.io/github/last-commit/InventraTech/inventra-development-spring-redis-neo4j-2?style=flat-square&label=&color=6A00FF) |
 | [**development-mongo**](https://github.com/InventraTech/inventra-development-mongo-2) | Desenvolvimento | API em Spring para o banco não relacional MongoDB | ![](https://img.shields.io/github/last-commit/InventraTech/inventra-development-mongo-2?style=flat-square&label=&color=6A00FF) |
 | [**dynamic-applications**](https://github.com/InventraTech/inventra-dynamic-applications-2) | Aplicações Dinâmicas | Front-end em React, TypeScript e Tailwind CSS | ![](https://img.shields.io/github/last-commit/InventraTech/inventra-dynamic-applications-2?style=flat-square&label=&color=6A00FF) |
 | [**artificial-intelligence**](https://github.com/InventraTech/inventra-artificial-intelligence-2) | Inteligência Artificial | Sistema multiagente para estoquistas, compradores e supervisores | ![](https://img.shields.io/github/last-commit/InventraTech/inventra-artificial-intelligence-2?style=flat-square&label=&color=6A00FF) |
 | [**mobile-development**](https://github.com/InventraTech/inventra-mobile-development-2) | Desenvolvimento Mobile | Aplicativo mobile do Inventra | ![](https://img.shields.io/github/last-commit/InventraTech/inventra-mobile-development-2?style=flat-square&label=&color=6A00FF) |
 | [**agile-operations**](https://github.com/InventraTech/inventra-agile-operations-development-2) | Operações Ágeis | Automação, infraestrutura, conteinerização e implantação | ![](https://img.shields.io/github/last-commit/InventraTech/inventra-agile-operations-development-2?style=flat-square&label=&color=6A00FF) |
+| [**gitops**](https://github.com/InventraTech/inventra-gitops) | Operações Ágeis | Manifestos de implantação (GitOps), atualizados pelo CD das aplicações | ![](https://img.shields.io/github/last-commit/InventraTech/inventra-gitops?style=flat-square&label=&color=6A00FF) |
 | [**software-engineering**](https://github.com/InventraTech/inventra-software-engineering-2) | Engenharia e Qualidade de Software | Levantamento e documentação de requisitos | ![](https://img.shields.io/github/last-commit/InventraTech/inventra-software-engineering-2?style=flat-square&label=&color=6A00FF) |
 
 <details>
@@ -158,20 +160,21 @@ flowchart LR
 
 | Repositório | Disciplina | Descrição |
 |---|---|---|
-| [**Inventra1-BD**](https://github.com/InventraTech/Inventra1-BD) | Banco de Dados | Projetos de banco de dados do 1º ano |
-| [**inventra1-poo**](https://github.com/InventraTech/inventra1-poo) | Programação Orientada a Objetos | Demandas de POO do 1º ano |
-| [**Inventra1-POO-LPR**](https://github.com/InventraTech/Inventra1-POO-LPR) | POO / LPR | Projetos de POO/LPR do 1º ano |
-| [**Inventra1-HTML**](https://github.com/InventraTech/Inventra1-HTML) | HTML | Projetos de HTML do 1º ano |
+| [**database-1**](https://github.com/InventraTech/inventra-database-1) | Banco de Dados | Projetos de banco de dados do 1º ano |
+| [**poo-lpr-1**](https://github.com/InventraTech/inventra-poo-lpr-1) | POO / LPR | Projetos de Programação Orientada a Objetos e LPR do 1º ano |
+| [**landing-page-1**](https://github.com/InventraTech/inventra-landing-page-1) | HTML | Projetos de HTML e landing pages do 1º ano |
 
 </details>
 
-<sub>O repositório [.github](https://github.com/InventraTech/.github) reúne as configurações padrão da organização: README de perfil, template de Pull Request e workflows de CI/CD reutilizáveis.</sub>
+<sub>O repositório [.github](https://github.com/InventraTech/.github) reúne as configurações padrão da organização: README de perfil, template de Pull Request e workflows reutilizáveis de CI/CD (Java, Kotlin, Node, Python) e de validação SQL.</sub>
 
 ## Equipe
 
 <div align="center">
 
 ### 2º ano
+
+<sub>Time no GitHub: <a href="https://github.com/orgs/InventraTech/teams/2-ano"><code>@InventraTech/2-ano</code></a></sub>
 
 <table>
 <tr>
@@ -199,6 +202,8 @@ flowchart LR
 </table>
 
 ### 1º ano
+
+<sub>Time no GitHub: <a href="https://github.com/orgs/InventraTech/teams/1-ano"><code>@InventraTech/1-ano</code></a></sub>
 
 <table>
 <tr>
