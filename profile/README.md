@@ -93,36 +93,49 @@ flowchart LR
     end
 
     subgraph Backend
-        API["API Spring<br/>Redis + Neo4j"]
-        MAPI["API Spring<br/>MongoDB"]
-        IA["IAI<br/>Python · multiagente"]
+        API["API<br/>Java · Spring Boot"]
+        IA["IAI<br/>Python · FastAPI · multiagente"]
     end
 
     subgraph Dados
         PG[("PostgreSQL")]
         RD[("Redis")]
-        NJ[("Neo4j")]
         MG[("MongoDB")]
     end
 
     WEB --> API
-    MOB --> API
-    WEB --> MAPI
     WEB --> IA
+    MOB --> API
+    IA -->|consulta e propõe| API
     API --> PG
     API --> RD
-    API --> NJ
-    MAPI --> MG
+    IA --> MG
 
     classDef cliente fill:#6A00FF,stroke:#360082,color:#ffffff
     classDef servico fill:#360082,stroke:#6A00FF,color:#ffffff
     classDef dado fill:#FFDE3B,stroke:#ECC506,color:#360082
     class WEB,MOB cliente
-    class API,MAPI,IA servico
-    class PG,RD,NJ,MG dado
+    class API,IA servico
+    class PG,RD,MG dado
 ```
 
-<sub>Visão geral das frentes de desenvolvimento. A infraestrutura (Docker e CI/CD com GitHub Actions) é mantida pela frente de Operações Ágeis.</sub>
+<sub>Visão geral das frentes de desenvolvimento. O PostgreSQL guarda o cadastro, o estoque e as requisições; o Redis, os tokens, a fila de cadastro e o ranking de validade; o MongoDB, as conversas e as métricas da IAI. A IAI acessa o estoque pela API, nunca direto no banco. O front-end ainda é um protótipo e não consome os serviços. Docker, CI/CD e implantação são mantidos pela frente de Operações Ágeis.</sub>
+
+### Entrega contínua
+
+```mermaid
+flowchart LR
+    TAG["Tag vX.Y.Z<br/>no repo da API"] --> CD["CD<br/>build, scan e push"]
+    CD --> IMG["Imagem<br/>no GHCR"]
+    CD --> PR["PR de bump<br/>no gitops"]
+    PR -->|merge| ARGO["Argo CD"]
+    ARGO --> CAN["Argo Rollouts<br/>canary 25 → 100%"]
+
+    classDef etapa fill:#360082,stroke:#6A00FF,color:#ffffff
+    class TAG,CD,IMG,PR,ARGO,CAN etapa
+```
+
+<sub>Fluxo da API em produção (k3s). Os workflows reutilizáveis de CI/CD ficam neste repositório; a PR de bump ainda depende do ajuste do `cd-java.yaml` e hoje o gitops só cadastra a API.</sub>
 
 ## Tecnologias
 
@@ -132,8 +145,8 @@ flowchart LR
 <br /><br />
 <img src="https://skillicons.dev/icons?i=postgres,mongodb,redis,docker,githubactions,git,github&perline=7" alt="Dados e infraestrutura" />
 <br /><br />
-<img src="https://img.shields.io/badge/Neo4j-4581C3?style=for-the-badge&logo=neo4j&logoColor=white" alt="Neo4j" />
-<img src="https://img.shields.io/badge/Jupyter-F37626?style=for-the-badge&logo=jupyter&logoColor=white" alt="Jupyter" />
+<img src="https://img.shields.io/badge/Argo_CD-EF7B4D?style=for-the-badge&logo=argo&logoColor=white" alt="Argo CD" />
+<img src="https://img.shields.io/badge/Kubernetes-326CE5?style=for-the-badge&logo=kubernetes&logoColor=white" alt="Kubernetes" />
 
 </div>
 
@@ -143,15 +156,13 @@ flowchart LR
 
 | Repositório | Frente | Descrição | Atividade |
 |---|---|---|---|
-| [**database**](https://github.com/InventraTech/inventra-database-2) | Arte e Modelagem de Dados | Modelagem e scripts do banco relacional (PostgreSQL) | ![](https://img.shields.io/github/last-commit/InventraTech/inventra-database-2?style=flat-square&label=&color=6A00FF) |
+| [**database**](https://github.com/InventraTech/inventra-database-2) | Arte e Modelagem de Dados | Fonte da verdade dos bancos: PostgreSQL, MongoDB e Redis | ![](https://img.shields.io/github/last-commit/InventraTech/inventra-database-2?style=flat-square&label=&color=6A00FF) |
 | [**database-rpa**](https://github.com/InventraTech/inventra-database-rpa-2) | Arte e Modelagem de Dados | Automações (RPA) do time do 2º ano | ![](https://img.shields.io/github/last-commit/InventraTech/inventra-database-rpa-2?style=flat-square&label=&color=6A00FF) |
-| [**spring-redis-neo4j**](https://github.com/InventraTech/inventra-development-spring-redis-neo4j-2) | Desenvolvimento | API em Spring, com Redis e Neo4j | ![](https://img.shields.io/github/last-commit/InventraTech/inventra-development-spring-redis-neo4j-2?style=flat-square&label=&color=6A00FF) |
-| [**development-mongo**](https://github.com/InventraTech/inventra-development-mongo-2) | Desenvolvimento | API em Spring para o banco não relacional MongoDB | ![](https://img.shields.io/github/last-commit/InventraTech/inventra-development-mongo-2?style=flat-square&label=&color=6A00FF) |
+| [**api**](https://github.com/InventraTech/inventra-api-2) | Desenvolvimento | API REST em Java e Spring Boot (PostgreSQL e Redis) | ![](https://img.shields.io/github/last-commit/InventraTech/inventra-api-2?style=flat-square&label=&color=6A00FF) |
 | [**dynamic-applications**](https://github.com/InventraTech/inventra-dynamic-applications-2) | Aplicações Dinâmicas | Front-end em React, TypeScript e Tailwind CSS | ![](https://img.shields.io/github/last-commit/InventraTech/inventra-dynamic-applications-2?style=flat-square&label=&color=6A00FF) |
-| [**artificial-intelligence**](https://github.com/InventraTech/inventra-artificial-intelligence-2) | Inteligência Artificial | Sistema multiagente para estoquistas, compradores e supervisores | ![](https://img.shields.io/github/last-commit/InventraTech/inventra-artificial-intelligence-2?style=flat-square&label=&color=6A00FF) |
+| [**artificial-intelligence**](https://github.com/InventraTech/inventra-artificial-intelligence-2) | Inteligência Artificial | Assistente multiagente (FastAPI, LangGraph e MongoDB) para estoquistas, compradores e supervisores | ![](https://img.shields.io/github/last-commit/InventraTech/inventra-artificial-intelligence-2?style=flat-square&label=&color=6A00FF) |
 | [**mobile-development**](https://github.com/InventraTech/inventra-mobile-development-2) | Desenvolvimento Mobile | Aplicativo mobile do Inventra | ![](https://img.shields.io/github/last-commit/InventraTech/inventra-mobile-development-2?style=flat-square&label=&color=6A00FF) |
-| [**agile-operations**](https://github.com/InventraTech/inventra-agile-operations-development-2) | Operações Ágeis | Automação, infraestrutura, conteinerização e implantação | ![](https://img.shields.io/github/last-commit/InventraTech/inventra-agile-operations-development-2?style=flat-square&label=&color=6A00FF) |
-| [**gitops**](https://github.com/InventraTech/inventra-gitops) | Operações Ágeis | Manifestos de implantação (GitOps), atualizados pelo CD das aplicações | ![](https://img.shields.io/github/last-commit/InventraTech/inventra-gitops?style=flat-square&label=&color=6A00FF) |
+| [**gitops**](https://github.com/InventraTech/inventra-gitops) | Operações Ágeis | Implantação em produção: Argo CD, Argo Rollouts (canary) e manifestos GitOps | ![](https://img.shields.io/github/last-commit/InventraTech/inventra-gitops?style=flat-square&label=&color=6A00FF) |
 | [**software-engineering**](https://github.com/InventraTech/inventra-software-engineering-2) | Engenharia e Qualidade de Software | Levantamento e documentação de requisitos | ![](https://img.shields.io/github/last-commit/InventraTech/inventra-software-engineering-2?style=flat-square&label=&color=6A00FF) |
 
 <details>
