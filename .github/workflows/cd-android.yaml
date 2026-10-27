@@ -1,0 +1,134 @@
+name: "Android Continuous Deployment"
+
+# Release por tag: `vX.Y.Z` -> APK (assinado, se houver keystore) -> GitHub Release com o APK anexado.
+# O workflow chamador deve disparar em `push: tags: ['v*']`.
+#
+# Assinatura: se os 4 secrets ANDROID_KEYSTORE_* / ANDROID_KEY_* forem informados, o APK de release
+# é assinado com o apksigner (sem precisar de signingConfig no Gradle). Sem eles, o workflow cai
+# para o APK debug, que já é instalável para testes (entregável do épico: "APK ou link para testar").
+
+on:
+  workflow_call:
+    inputs:
+      java-version:
+        type: string
+        default: '21'
+      module:
+        description: "Módulo Gradle do app Android"
+        type: string
+        default: 'app'
+      api-base-url:
+        description: "API_BASE_URL embutida no app (vazio = padrão do build.gradle.kts)"
+        type: string
+        default: ''
+    secrets:
+      MAPS_API_KEY:
+        description: "Chave do Google Maps (vira manifestPlaceholder via local.properties)"
+        required: false
+      ANDROID_KEYSTORE_BASE64:
+        description: "Keystore de release em base64"
+        required: false
+      ANDROID_KEYSTORE_PASSWORD:
+        required: false
+      ANDROID_KEY_ALIAS:
+        required: false
+      ANDROID_KEY_PASSWORD:
+        required: false
+
+# Duas releases do mesmo app não rodam ao mesmo tempo.
+concurrency:
+  group: cd-${{ github.repository }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: "Build do APK e GitHub Release"
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+    steps:
+      - name: "Exigir tag vX.Y.Z"
+        run: |
+          if [[ "${GITHUB_REF_TYPE}" != "tag" ]] || [[ ! "${GITHUB_REF_NAME}" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::error::Este workflow só roda em tags no formato vX.Y.Z (recebido: ${GITHUB_REF_TYPE} ${GITHUB_REF_NAME})."
+            exit 1
+          fi
+
+      - name: "Checkout do código"
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: "Exigir que a tag esteja na main"
+        # Impede release de um commit que nunca passou por PR e CI.
+        run: |
+          git fetch origin main
+          if ! git merge-base --is-ancestor "${GITHUB_SHA}" origin/main; then
+            echo "::error::A tag ${GITHUB_REF_NAME} aponta para um commit fora da main."
+            exit 1
+          fi
+
+      - name: "Configurar o Java"
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'temurin'
+          java-version: ${{ inputs.java-version }}
+
+      - name: "Gerar local.properties"
+        # O build.gradle.kts lê MAPS_API_KEY e API_BASE_URL daqui; só escrevemos o que veio preenchido
+        # porque uma string vazia no ambiente sobrescreveria o valor padrão.
+        env:
+          MAPS_API_KEY: ${{ secrets.MAPS_API_KEY }}
+          API_BASE_URL: ${{ inputs.api-base-url }}
+        run: |
+          : > local.properties
+          [[ -n "${MAPS_API_KEY}" ]] && echo "MAPS_API_KEY=${MAPS_API_KEY}" >> local.properties
+          [[ -n "${API_BASE_URL}" ]] && echo "API_BASE_URL=${API_BASE_URL}" >> local.properties
+          exit 0
+
+      - name: "Build do APK de release"
+        if: ${{ env.KEYSTORE_BASE64 != '' }}
+        run: |
+          chmod +x ./gradlew
+          ./gradlew :${{ inputs.module }}:assembleRelease
+
+      - name: "Assinar o APK"
+        if: ${{ env.KEYSTORE_BASE64 != '' }}
+        env:
+          KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          echo "${KEYSTORE_BASE64}" | base64 -d > "${RUNNER_TEMP}/release.keystore"
+          APKSIGNER="$(ls -d "${ANDROID_HOME}"/build-tools/*/apksigner | sort -V | tail -n 1)"
+          UNSIGNED="$(ls ${{ inputs.module }}/build/outputs/apk/release/*.apk | head -n 1)"
+          mkdir -p dist
+          "${APKSIGNER}" sign \
+            --ks "${RUNNER_TEMP}/release.keystore" \
+            --ks-pass env:KEYSTORE_PASSWORD \
+            --ks-key-alias "${KEY_ALIAS}" \
+            --key-pass env:KEY_PASSWORD \
+            --out "dist/inventra-${GITHUB_REF_NAME}.apk" \
+            "${UNSIGNED}"
+          "${APKSIGNER}" verify "dist/inventra-${GITHUB_REF_NAME}.apk"
+          rm -f "${RUNNER_TEMP}/release.keystore"
+
+      - name: "Build do APK debug (sem keystore configurada)"
+        if: ${{ env.KEYSTORE_BASE64 == '' }}
+        run: |
+          echo "::warning::Secrets de assinatura ausentes; publicando o APK debug."
+          chmod +x ./gradlew
+          ./gradlew :${{ inputs.module }}:assembleDebug
+          mkdir -p dist
+          cp "$(ls ${{ inputs.module }}/build/outputs/apk/debug/*.apk | head -n 1)" "dist/inventra-${GITHUB_REF_NAME}-debug.apk"
+
+      - name: "Publicar GitHub Release"
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${GITHUB_REF_NAME}" dist/*.apk \
+            --title "${GITHUB_REF_NAME}" \
+            --generate-notes \
+            --verify-tag
