@@ -177,7 +177,7 @@ flowchart LR
 
 </details>
 
-<sub>O repositório [.github](https://github.com/InventraTech/.github) reúne as configurações padrão da organização: README de perfil, template de Pull Request e workflows reutilizáveis de CI/CD (Java, Kotlin, Node, Python) e de validação SQL.</sub>
+<sub>O repositório [.github](https://github.com/InventraTech/.github) reúne as configurações padrão da organização: README de perfil, template de Pull Request e workflows reutilizáveis de CI/CD (Java, Kotlin, Android, Node, Python) e de validação SQL.</sub>
 
 ## Equipe
 
