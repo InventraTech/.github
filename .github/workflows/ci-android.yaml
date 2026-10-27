@@ -1,0 +1,74 @@
+name: "Android Continuous Integration"
+
+# Validação de PR/push de um app Android (Gradle): estilo (ktlint), análise estática (detekt),
+# Android Lint, testes unitários com cobertura (Kover) e compilação do APK debug.
+# Em PR, o APK debug fica anexado à execução para o time testar antes do merge.
+
+on:
+  workflow_call:
+    inputs:
+      java-version:
+        type: string
+        default: '21'
+      module:
+        description: "Módulo Gradle do app Android"
+        type: string
+        default: 'app'
+
+# Uma nova execução na mesma branch/PR cancela a anterior.
+concurrency:
+  group: ci-android-${{ github.repository }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    name: "Qualidade, testes e build"
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      MODULE: ${{ inputs.module }}
+    steps:
+      - name: "Checkout do código"
+        uses: actions/checkout@v7
+
+      - name: "Configurar o Java"
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'temurin'
+          java-version: ${{ inputs.java-version }}
+
+      - name: "Configurar o Gradle (com cache)"
+        uses: gradle/actions/setup-gradle@v6
+
+      - name: "Lint, testes, cobertura e build do APK debug"
+        # --continue mostra todas as falhas de uma vez em vez de parar na primeira.
+        run: |
+          chmod +x ./gradlew
+          ./gradlew --continue \
+            ":${MODULE}:ktlintCheck" \
+            ":${MODULE}:detekt" \
+            ":${MODULE}:lintDebug" \
+            ":${MODULE}:test" \
+            ":${MODULE}:koverXmlReport" \
+            ":${MODULE}:assembleDebug"
+
+      - name: "Anexar relatórios (lint, testes, detekt, cobertura)"
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: relatorios
+          path: ${{ inputs.module }}/build/reports/
+          if-no-files-found: ignore
+          retention-days: 14
+
+      - name: "Anexar APK debug (PR)"
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: apk-debug
+          path: ${{ inputs.module }}/build/outputs/apk/debug/*.apk
+          if-no-files-found: error
+          retention-days: 7
