@@ -125,7 +125,7 @@ flowchart LR
 
 ```mermaid
 flowchart LR
-    TAG["Tag vX.Y.Z<br/>no repo da API"] --> CD["CD<br/>build, scan e push"]
+    TAG["Tag vX.Y.Z<br/>no repo da API ou da IA"] --> CD["CD<br/>build, scan e push"]
     CD --> IMG["Imagem<br/>no GHCR"]
     CD --> PR["PR de bump<br/>no gitops"]
     PR -->|merge| ARGO["Argo CD"]
@@ -135,7 +135,7 @@ flowchart LR
     class TAG,CD,IMG,PR,ARGO,CAN etapa
 ```
 
-<sub>Fluxo da API em produção (k3s). Os workflows reutilizáveis de CI/CD ficam neste repositório; a PR de bump ainda depende do ajuste do `cd-java.yaml` e hoje o gitops só cadastra a API.</sub>
+<sub>Fluxo da API e da IA em produção (k3s numa EC2 da AWS). Os workflows reutilizáveis de CI/CD ficam neste repositório; o CD abre a PR de bump no gitops pelo `inventra-release-bot`, e a versão nova só entra no cluster depois que a PR é aprovada.</sub>
 
 ## Tecnologias
 
